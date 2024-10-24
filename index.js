@@ -81,6 +81,8 @@ const obse2=new Observable(sub1=>sub1.next(sour1)).pipe(
 obse2.subscribe(result => console.log(result));
 */
 
+/*
+
 let array=of(1, 2, 3, 4, 5,6,7,8,9)
 // const observable=new Observable(sub=>sub.next(array))
 console.log("map operator");
@@ -119,3 +121,28 @@ const source = from([1, 1, 2, 2, 3, 3, 3, 4, 5]);
 source.pipe(
   distinctUntilChanged()
 ).subscribe(result => console.log(result));
+
+*/
+
+const observable=new Observable((sub)=>{
+  sub.next(1)
+  sub.next(2)
+  sub.next(3)
+  sub.next(4)
+  // sub.next("hellow")
+}).pipe(
+  map(a=>a*3),
+  filter(a=>a%2==0)
+)
+ const subs=observable.subscribe({
+  next:value=> console.log(value),
+  error :err=>console.log({"error":err }),
+  complete:()=>console.log("completd"),
+  
+  
+ })
+
+ setTimeout(() => {
+  subs.unsubscribe ();
+  console.log('Unsubscribed');
+}, 1000);
