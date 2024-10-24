@@ -1,4 +1,36 @@
-const { of, map, filter, Observable, merge, debounce, catchError, pluck, distinctUntilChanged, Subscription, debounceTime, switchMap, delay, forkJoin, concat, from } = require("rxjs");
+const { of, map, filter, Observable, merge, debounce, catchError, pluck, distinctUntilChanged, Subscription, debounceTime, switchMap, delay, forkJoin, concat, from, Subject, BehaviorSubject, ReplaySubject, AsyncSubject } = require("rxjs");
+
+//****************************RXJS ****************/
+
+/*
+const observable=new Observable((sub)=>{
+  sub.next(1)
+  sub.next(2)
+  sub.next(3)
+  sub.next(4)
+  // sub.next("hellow")
+}).pipe(
+  map(a=>a*3),
+  filter(a=>a%2==0)
+)
+ const subs=observable.subscribe({
+  next:value=> console.log(value),
+  error :err=>console.log({"error":err }),
+  complete:()=>console.log("completd"),
+  
+  
+ })
+
+ setTimeout(() => {
+  subs.unsubscribe ();
+  console.log('Unsubscribed');
+}, 1000);
+
+
+*/
+
+//****************************OPERATORS ****************/
+
 /*
 //map
 //You receive user input in a form and want to capitalize it before further processing.
@@ -124,25 +156,78 @@ source.pipe(
 
 */
 
-const observable=new Observable((sub)=>{
-  sub.next(1)
-  sub.next(2)
-  sub.next(3)
-  sub.next(4)
-  // sub.next("hellow")
-}).pipe(
-  map(a=>a*3),
-  filter(a=>a%2==0)
-)
- const subs=observable.subscribe({
-  next:value=> console.log(value),
-  error :err=>console.log({"error":err }),
-  complete:()=>console.log("completd"),
-  
-  
- })
 
- setTimeout(() => {
-  subs.unsubscribe ();
-  console.log('Unsubscribed');
-}, 1000);
+//**************************** Subject-MULTICAST ****************/
+ const subject=new Subject()
+ subject.subscribe({
+  next: (v) => console.log(`observerA: ${v}`)
+});
+
+subject.next(1);
+
+// Subscriber 2
+subject.subscribe({
+  next: (v) => console.log(`observerB: ${v}`)
+});
+
+subject.next(2);
+subject.next(3);
+subject.next(4);
+
+
+/***********BehaviourSubject ***************** */
+console.log("BehaviourSubject");
+
+const behaviourSubject = new BehaviorSubject(0); // 0 is the initial value
+behaviourSubject.subscribe({
+  next: (v) => console.log(`observerA: ${v}`)
+});
+behaviourSubject.next(1);
+behaviourSubject.next(2);
+behaviourSubject.subscribe({
+  next: (v) => console.log(`observerB: ${v}`)
+});
+behaviourSubject.next(3);
+behaviourSubject.next(4);
+behaviourSubject.next(5);
+
+//************* ReplaySubject  ***********/
+console.log("ReplaySubject");
+const replaySubject = new ReplaySubject(); // 0 is the initial value
+replaySubject.subscribe({
+  next: (v) => console.log(`observerA: ${v}`)
+});
+replaySubject.next(1);
+replaySubject.subscribe({
+  next: (v) => console.log(`observerB: ${v}`)
+});
+replaySubject.next(3);
+replaySubject.next(4);
+replaySubject.next(5);
+
+//************* AsyncSubject  ***********/
+console.log("ASYNCPIPE");
+
+const subject2 = new  AsyncSubject();
+
+subject2.subscribe({
+  next: (v) => console.log(`observerA: ${v}`)
+});
+
+subject2.next(1);
+subject2.next(2);
+subject2.next(3);
+subject2.next(4);
+
+subject2.subscribe({
+  next: (v) => console.log(`observerB: ${v}`)
+});
+
+subject.next(5);
+subject.complete();
+
+
+
+
+
+
